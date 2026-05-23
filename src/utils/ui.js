@@ -63,6 +63,33 @@ export function closePopover() {
 
 export { openPopover_ as openPopover };
 
+/* ------------------------------- Modal ------------------------------- */
+export function openModal(content, { title = "", width = 360 } = {}) {
+  const host = document.getElementById("modal-host");
+  clear(host);
+  host.classList.add("is-open");
+  const panel = h("div", { class: "modal-panel" }, [
+    title ? h("div", { class: "popover__header" }, [
+      h("div", { class: "popover__title" }, title),
+      h("button", { class: "popover__close", onClick: () => close() }, icon("close")),
+    ]) : null,
+    content,
+  ]);
+  if (width) panel.style.maxWidth = width + "px";
+  host.appendChild(panel);
+  function close() {
+    host.classList.remove("is-open");
+    clear(host);
+    document.removeEventListener("keydown", onKey);
+    host.removeEventListener("mousedown", onDown);
+  }
+  function onKey(e) { if (e.key === "Escape") close(); }
+  function onDown(e) { if (e.target === host) close(); }
+  document.addEventListener("keydown", onKey);
+  setTimeout(() => host.addEventListener("mousedown", onDown), 0);
+  return { close };
+}
+
 /* --------------------------------- Toast --------------------------------- */
 export function toast(msg, { action = null, kind = "info", duration = 3000 } = {}) {
   const host = document.getElementById("toast-host");

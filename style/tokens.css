@@ -1,5 +1,6 @@
 /* Design tokens — colors, spacing, type, radii, shadows, motion */
 :root {
+  color-scheme: dark;
   /* Surfaces */
   --bg-app: #0e1620;
   --bg-board: #15202d;
@@ -12,8 +13,8 @@
   --bg-overlay: rgba(5, 10, 18, 0.62);
   --bg-input: #243245;
   --bg-input-focus: #2a3a52;
-  --bg-hover: rgba(255, 255, 255, 0.06);
-  --bg-hover-strong: rgba(255, 255, 255, 0.10);
+  --bg-hover: rgba(125, 178, 245, 0.09);
+  --bg-hover-strong: rgba(125, 178, 245, 0.15);
 
   /* Lines */
   --line-1: rgba(255, 255, 255, 0.06);
@@ -109,6 +110,7 @@
 
 /* Light theme override (toggleable) */
 :root[data-theme="light"] {
+  color-scheme: light;
   --bg-app: #f3f5f9;
   --bg-board: #e8edf3;
   --bg-panel: #ffffff;

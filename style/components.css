@@ -87,6 +87,15 @@
   transition: background var(--t-fast);
 }
 .inline-edit:hover { background: var(--bg-hover); }
+.inline-input {
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text-1);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-2);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  font-family: inherit;
+}
 
 /* Popover / menu */
 .popover {
@@ -239,6 +248,18 @@
   background: var(--bg-overlay);
   backdrop-filter: blur(6px);
   z-index: -1;
+}
+
+/* Centered modal panel */
+.modal-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-3);
+  padding: var(--sp-2);
+  width: 100%;
+  height: max-content;
+  animation: modalIn var(--t-med) var(--ease-spring);
 }
 
 /* Confirm dialog */

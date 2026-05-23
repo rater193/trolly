@@ -5,7 +5,7 @@
 
 import { h, icon, clear, initials } from "../utils/dom.js";
 import { boardSwatchStyle } from "./sidebar.js";
-import { openPopover, closePopover, toast } from "../utils/ui.js";
+import { openModal, toast } from "../utils/ui.js";
 import { BackgroundPicker } from "./pickers.js";
 
 export class Home {
@@ -94,7 +94,7 @@ export class Home {
     }, [ icon("plus"), h("span", {}, "Create new board") ]);
   }
 
-  _openNewBoardPicker(anchor) {
+  _openNewBoardPicker() {
     const s = this.state;
     const wsId = (s.currentWorkspace || s.workspaces[0]).id;
     let chosen = { type: "gradient", value: "linear-gradient(135deg, #1b3a5f 0%, #4f3573 100%)" };
@@ -104,7 +104,8 @@ export class Home {
       onChange: (bg) => { chosen = bg; preview.style.background = bg.value || bg; },
     });
     const preview = h("div", { class: "bg-tile", style: { height: "60px", background: chosen.value } });
-    openPopover(anchor, [
+    let modal;
+    modal = openModal([
       h("div", { class: "menu-label" }, "Title"),
       nameInput,
       h("div", { style: { height: "10px" } }),
@@ -118,12 +119,12 @@ export class Home {
         onClick: () => {
           const name = nameInput.value.trim() || "Untitled Board";
           const b = s.createBoard(wsId, { name, background: chosen });
-          closePopover();
+          modal.close();
           s.openBoard(b.id);
           toast("Board created", { kind: "ok" });
         },
       }, "Create board"),
-    ], { title: "New board", width: 280 });
+    ], { title: "New board", width: 300 });
     setTimeout(() => nameInput.focus(), 50);
   }
 
