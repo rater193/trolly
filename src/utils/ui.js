@@ -22,19 +22,12 @@ export function openPopover_(anchor, content, { title = "", width } = {}) {
     h("div", { class: "popover__body" }, content),
   ]);
   if (width) pop.style.width = width + "px";
-  host.appendChild(pop);
 
-  // Position
-  const rect = anchor.getBoundingClientRect();
-  const popRect = pop.getBoundingClientRect();
-  let left = rect.left;
-  let top = rect.bottom + 6;
-  if (left + popRect.width > window.innerWidth - 8) left = window.innerWidth - popRect.width - 8;
-  if (top + popRect.height > window.innerHeight - 8) top = rect.top - popRect.height - 6;
-  if (top < 8) top = 8;
-  if (left < 8) left = 8;
-  pop.style.left = left + "px";
-  pop.style.top = top + "px";
+  // Reactive positioning via CSS anchor positioning. We tag the trigger with a
+  // shared anchor-name (only one popover is open at a time) and let CSS place
+  // the popover and flip it to stay on-screen — no JS measuring needed.
+  anchor.style.setProperty("anchor-name", "--popover-anchor");
+  host.appendChild(pop);
 
   // Outside close
   const onDown = (e) => {
@@ -50,6 +43,7 @@ export function openPopover_(anchor, content, { title = "", width } = {}) {
   openPopover = { el: pop, cleanup: () => {
     document.removeEventListener("mousedown", onDown);
     document.removeEventListener("keydown", onKey);
+    anchor.style.removeProperty("anchor-name");
   } };
   return pop;
 }

@@ -101,6 +101,15 @@
 .popover {
   position: fixed;
   z-index: 1000;
+  /* Reactive placement: anchored under the trigger's left edge, flipping to
+     the opposite side automatically when it would overflow the viewport. */
+  position-anchor: --popover-anchor;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin-top: 6px;
+  position-try-fallbacks: --popover-flip-inline, --popover-flip-block, --popover-flip-both;
+  max-height: calc(100dvh - 16px);
+  overflow-y: auto;
   background: var(--bg-panel);
   border: 1px solid var(--line-2);
   border-radius: var(--r-3);
@@ -110,6 +119,27 @@
   max-width: 320px;
   animation: popIn var(--t-med) var(--ease-spring);
   transform-origin: top left;
+}
+/* Overflows right → right-align to the trigger and grow leftward. */
+@position-try --popover-flip-inline {
+  left: auto;
+  right: anchor(right);
+}
+/* Overflows bottom → place above the trigger. */
+@position-try --popover-flip-block {
+  top: auto;
+  bottom: anchor(top);
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+/* Overflows both → flip to the top-right corner. */
+@position-try --popover-flip-both {
+  top: auto;
+  bottom: anchor(top);
+  left: auto;
+  right: anchor(right);
+  margin-top: 0;
+  margin-bottom: 6px;
 }
 .popover__header {
   display: flex;
