@@ -175,10 +175,14 @@
 }
 .ws-block__chev {
   color: var(--text-3);
-  width: 14px; height: 14px;
-  transition: transform var(--t-med) var(--ease-out);
+  width: 20px; height: 20px;
+  display: grid; place-items: center;
+  border-radius: var(--r-2);
+  transition: transform var(--t-med) var(--ease-out), background var(--t-fast), color var(--t-fast);
   flex-shrink: 0;
 }
+.ws-block__chev svg { width: 14px; height: 14px; }
+.ws-block__chev:hover { background: var(--bg-hover); color: var(--text-1); }
 .ws-block.is-collapsed .ws-block__chev { transform: rotate(-90deg); }
 .ws-block__boards {
   display: flex;

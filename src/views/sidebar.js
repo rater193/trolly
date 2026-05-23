@@ -82,7 +82,7 @@ export class Sidebar {
 
   _renderWorkspaceBlock(ws) {
     const block = h("div", { class: "ws-block" + (ws.collapsed ? " is-collapsed" : "") });
-    const head = h("button", { class: "ws-block__head", onClick: () => this.state.toggleWorkspaceCollapsed(ws.id) }, [
+    const head = h("div", { class: "ws-block__head", onClick: () => this.state.openWorkspace(ws.id) }, [
       h("div", { class: "ws-block__avatar", style: { background: ws.color } }, initials(ws.name)),
       h("div", { class: "ws-block__name" }, ws.name),
       h("button", {
@@ -90,7 +90,15 @@ export class Sidebar {
         style: { width: "22px", height: "22px" },
         onClick: (e) => { e.stopPropagation(); this._openWorkspaceMenu(e.currentTarget, ws); },
       }, icon("more")),
-      (() => { const wrap = h("div", { class: "ws-block__chev" }); wrap.appendChild(icon("chevronD")); return wrap; })(),
+      (() => {
+        const chev = h("button", {
+          class: "ws-block__chev",
+          title: ws.collapsed ? "Expand boards" : "Collapse boards",
+          onClick: (e) => { e.stopPropagation(); this.state.toggleWorkspaceCollapsed(ws.id); },
+        });
+        chev.appendChild(icon("chevronD"));
+        return chev;
+      })(),
     ]);
     const boards = h("div", { class: "ws-block__boards" });
 
