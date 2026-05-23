@@ -1,0 +1,47 @@
+{
+  "name": "trolley",
+  "version": "1.0.0",
+  "description": "Offline Trello-style board app",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "build": "npx electron-builder",
+    "build:win": "npx electron-builder --win",
+    "build:mac": "npx electron-builder --mac",
+    "build:linux": "npx electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.trolley.app",
+    "productName": "Trolley",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "src/**/*",
+      "style/**/*",
+      "main.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^34.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}

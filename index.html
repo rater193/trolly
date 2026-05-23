@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trolley · Offline Boards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/reset.css" />
+  <link rel="stylesheet" href="style/tokens.css" />
+  <link rel="stylesheet" href="style/animations.css" />
+  <link rel="stylesheet" href="style/components.css" />
+  <link rel="stylesheet" href="style/layout.css" />
+  <link rel="stylesheet" href="style/board.css" />
+  <link rel="stylesheet" href="style/card-modal.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Workspace navigation"></aside>
+    <main class="main"></main>
+  </div>
+
+  <!-- Hosts for floating UI -->
+  <div id="popover-host"></div>
+  <div id="modal-host" class="modal-host"></div>
+  <div id="toast-host" class="toast-host" aria-live="polite"></div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
