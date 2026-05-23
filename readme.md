@@ -13,7 +13,7 @@ Trolley is an offline-first Trello-style board app built with HTML/CSS/JS and pa
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/trolley.git
+git clone https://github.com/rater193/trolly.git
 cd trolley
 
 # 2. Install dependencies (downloads Electron ~100MB, one-time)
