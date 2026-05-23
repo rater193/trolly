@@ -498,7 +498,7 @@
 :root[data-theme="light"] .date-picker input[type="time"] { color-scheme: light; }
 
 /* Background picker */
-.bg-picker { width: 280px; }
+.bg-picker { width: 100%; }
 .bg-picker__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
