@@ -3,7 +3,7 @@
  */
 
 import { h, icon, clear, initials, colorFromStr, makeInlineEditable } from "../utils/dom.js";
-import { openPopover, closePopover, confirmDialog, toast } from "../utils/ui.js";
+import { openPopover, closePopover, confirmDialog, promptDialog, choiceDialog, toast } from "../utils/ui.js";
 
 export class Sidebar {
   constructor(state) {
@@ -129,17 +129,16 @@ export class Sidebar {
   }
 
   _promptNewWorkspace() {
-    const ws = this.state.createWorkspace("New Workspace");
-    this.state.openWorkspace(ws.id);
-    toast("Workspace created", { kind: "ok" });
-    // Immediately put the name into edit mode in next render
-    setTimeout(() => {
-      const blocks = this.el.querySelectorAll(".ws-block__name");
-      const lastBlock = blocks[blocks.length - 1];
-      if (lastBlock) {
-        lastBlock.click();
-      }
-    }, 50);
+    promptDialog({
+      title: "New workspace",
+      placeholder: "Workspace name",
+      confirmLabel: "Create",
+      onConfirm: (name) => {
+        const ws = this.state.createWorkspace(name);
+        this.state.openWorkspace(ws.id);
+        toast("Workspace created", { kind: "ok" });
+      },
+    });
   }
 
   _promptNewBoard(wsId) {
@@ -164,8 +163,12 @@ export class Sidebar {
     ], { title: ws.name });
   }
   _renameWorkspace(ws) {
-    const newName = prompt("Workspace name", ws.name);
-    if (newName && newName.trim()) this.state.renameWorkspace(ws.id, newName.trim());
+    promptDialog({
+      title: "Rename workspace",
+      value: ws.name,
+      placeholder: "Workspace name",
+      onConfirm: (name) => this.state.renameWorkspace(ws.id, name),
+    });
   }
   _deleteWorkspace(ws) {
     confirmDialog({
@@ -235,15 +238,22 @@ export class Sidebar {
       if (!file) return;
       try {
         const wss = await this.state.storage.importJson(file);
-        const replace = confirm("Replace current data?\n\nOK = Replace all\nCancel = Merge as new workspaces");
-        if (replace) {
-          this.state.workspaces = wss;
-        } else {
-          this.state.workspaces.push(...wss);
-        }
-        this.state.persist();
-        this.state.bus.emit("nav:changed");
-        toast("Import complete", { kind: "ok" });
+        const apply = (replace) => {
+          if (replace) this.state.workspaces = wss;
+          else this.state.workspaces.push(...wss);
+          this.state.persist();
+          this.state.bus.emit("nav:changed");
+          toast("Import complete", { kind: "ok" });
+        };
+        choiceDialog({
+          title: "Import data",
+          msg: "Replace your current data, or merge the imported workspaces alongside it?",
+          choices: [
+            { label: "Cancel" },
+            { label: "Merge as new", onClick: () => apply(false) },
+            { label: "Replace all", class: "btn-danger", onClick: () => apply(true) },
+          ],
+        });
       } catch (e) {
         toast("Import failed — not valid JSON");
       }

@@ -7,7 +7,7 @@ import { Sidebar } from "./views/sidebar.js";
 import { Home } from "./views/home.js";
 import { BoardView } from "./views/board.js";
 import { h, icon, clear } from "./utils/dom.js";
-import { closePopover, openPopover } from "./utils/ui.js";
+import { closePopover, openPopover, promptDialog } from "./utils/ui.js";
 
 class App {
   constructor() {
@@ -131,8 +131,12 @@ class App {
     }
   }
   _addCardToList(board, list) {
-    const title = prompt(`Add card to "${list.name}"`, "");
-    if (title && title.trim()) this.state.createCard(board.id, list.id, title.trim());
+    promptDialog({
+      title: `Add card to "${list.name}"`,
+      placeholder: "Card title",
+      confirmLabel: "Add card",
+      onConfirm: (title) => this.state.createCard(board.id, list.id, title),
+    });
   }
 
   _bindShortcuts() {

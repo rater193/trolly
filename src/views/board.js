@@ -5,7 +5,7 @@
 
 import { h, icon, clear, formatDue, makeInlineEditable } from "../utils/dom.js";
 import { DragManager } from "../utils/dnd.js";
-import { openPopover, closePopover, toast, confirmDialog } from "../utils/ui.js";
+import { openPopover, closePopover, toast, confirmDialog, promptDialog } from "../utils/ui.js";
 import { LabelPicker, DuePicker, CoverPicker, BackgroundPicker, FilterPanel } from "./pickers.js";
 import { CardModal } from "./cardModal.js";
 
@@ -221,8 +221,12 @@ export class BoardView {
     // Quick edit icon on hover
     const editIcon = h("button", { class: "card__edit-icon", title: "Edit", onClick: (e) => {
       e.stopPropagation();
-      const newTitle = prompt("Card title", card.title);
-      if (newTitle && newTitle.trim()) this.state.updateCard(board.id, list.id, card.id, { title: newTitle.trim() });
+      promptDialog({
+        title: "Edit card title",
+        value: card.title,
+        placeholder: "Card title",
+        onConfirm: (title) => this.state.updateCard(board.id, list.id, card.id, { title }),
+      });
     } }, icon("edit"));
     cardEl.appendChild(editIcon);
 

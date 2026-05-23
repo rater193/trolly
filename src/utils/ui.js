@@ -99,3 +99,49 @@ export function confirmDialog({ title, msg, confirmLabel = "Confirm", danger = f
   function onKey(e) { if (e.key === "Escape") close(); }
   document.addEventListener("keydown", onKey);
 }
+
+/* ------------------------------- Prompt ------------------------------- */
+export function promptDialog({ title, value = "", placeholder = "", confirmLabel = "Save", onConfirm }) {
+  const host = document.getElementById("modal-host");
+  clear(host);
+  host.classList.add("is-open");
+  const input = h("input", { class: "input", value, placeholder });
+  const submit = () => {
+    const v = input.value.trim();
+    if (!v) { input.classList.add("shake"); setTimeout(() => input.classList.remove("shake"), 400); input.focus(); return; }
+    onConfirm?.(v);
+    close();
+  };
+  const dlg = h("div", { class: "confirm" }, [
+    h("div", { class: "confirm__title" }, title),
+    h("div", { style: { marginBottom: "var(--sp-5)" } }, input),
+    h("div", { class: "confirm__actions" }, [
+      h("button", { class: "btn btn-ghost", onClick: close }, "Cancel"),
+      h("button", { class: "btn btn-primary", onClick: submit }, confirmLabel),
+    ]),
+  ]);
+  host.appendChild(dlg);
+  function close() { host.classList.remove("is-open"); clear(host); document.removeEventListener("keydown", onKey); }
+  function onKey(e) { if (e.key === "Escape") close(); }
+  document.addEventListener("keydown", onKey);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+  setTimeout(() => { input.focus(); input.select(); }, 0);
+}
+
+/* ------------------------------- Choice ------------------------------- */
+export function choiceDialog({ title, msg = "", choices = [] }) {
+  const host = document.getElementById("modal-host");
+  clear(host);
+  host.classList.add("is-open");
+  const dlg = h("div", { class: "confirm" }, [
+    h("div", { class: "confirm__title" }, title),
+    msg ? h("div", { class: "confirm__msg" }, msg) : null,
+    h("div", { class: "confirm__actions" }, choices.map((c) =>
+      h("button", { class: "btn " + (c.class || "btn-ghost"), onClick: () => { close(); c.onClick?.(); } }, c.label)
+    )),
+  ]);
+  host.appendChild(dlg);
+  function close() { host.classList.remove("is-open"); clear(host); document.removeEventListener("keydown", onKey); }
+  function onKey(e) { if (e.key === "Escape") close(); }
+  document.addEventListener("keydown", onKey);
+}
