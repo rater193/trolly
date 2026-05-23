@@ -108,8 +108,6 @@
   left: anchor(left);
   margin-top: 6px;
   position-try-fallbacks: --popover-flip-inline, --popover-flip-block, --popover-flip-both;
-  max-height: calc(100dvh - 16px);
-  overflow-y: auto;
   background: var(--bg-panel);
   border: 1px solid var(--line-2);
   border-radius: var(--r-3);
@@ -271,6 +269,8 @@
   overflow-y: auto;
 }
 .modal-host.is-open { display: flex; animation: overlayIn var(--t-med) var(--ease-out); }
+/* Transient dialogs (confirm/prompt/choice/modal) stack above the card modal. */
+#dialog-host { z-index: 900; }
 .modal-host::before {
   content: "";
   position: fixed;

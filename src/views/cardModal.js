@@ -30,9 +30,10 @@ export class CardModal {
     this.modal = h("div", { class: "card-modal" });
     host.appendChild(this.modal);
 
-    // Close on overlay or esc
-    this._onOverlay = (e) => { if (e.target === host) this.close(); };
-    this._onKey = (e) => { if (e.key === "Escape") this.close(); };
+    // Close on overlay or esc — but not while a dialog is stacked on top.
+    const dialogOpen = () => document.getElementById("dialog-host")?.classList.contains("is-open");
+    this._onOverlay = (e) => { if (!dialogOpen() && e.target === host) this.close(); };
+    this._onKey = (e) => { if (e.key === "Escape" && !dialogOpen()) this.close(); };
     host.addEventListener("click", this._onOverlay);
     document.addEventListener("keydown", this._onKey);
 

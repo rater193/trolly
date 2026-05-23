@@ -456,7 +456,7 @@
 .label-picker__check svg { width: 12px; height: 12px; color: transparent; }
 
 /* Filter panel */
-.filter-panel { width: 320px; }
+.filter-panel { width: 100%; }
 .filter-group { margin-bottom: var(--sp-4); }
 .filter-group__title {
   font-size: var(--fs-11);
@@ -482,7 +482,7 @@
 .filter-row__text.is-checked { color: var(--text-1); }
 
 /* Date picker */
-.date-picker { width: 280px; }
+.date-picker { width: 100%; }
 .date-picker__row { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
 .date-picker input[type="date"], .date-picker input[type="time"] {
   background: var(--bg-input);

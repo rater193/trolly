@@ -59,7 +59,7 @@ export { openPopover_ as openPopover };
 
 /* ------------------------------- Modal ------------------------------- */
 export function openModal(content, { title = "", width = 360 } = {}) {
-  const host = document.getElementById("modal-host");
+  const host = document.getElementById("dialog-host");
   clear(host);
   host.classList.add("is-open");
   const panel = h("div", { class: "modal-panel" }, [
@@ -104,7 +104,7 @@ export function toast(msg, { action = null, kind = "info", duration = 3000 } = {
 
 /* ------------------------------- Confirm ------------------------------- */
 export function confirmDialog({ title, msg, confirmLabel = "Confirm", danger = false, onConfirm }) {
-  const host = document.getElementById("modal-host");
+  const host = document.getElementById("dialog-host");
   clear(host);
   host.classList.add("is-open");
   const dlg = h("div", { class: "confirm" }, [
@@ -123,7 +123,7 @@ export function confirmDialog({ title, msg, confirmLabel = "Confirm", danger = f
 
 /* ------------------------------- Prompt ------------------------------- */
 export function promptDialog({ title, value = "", placeholder = "", confirmLabel = "Save", onConfirm }) {
-  const host = document.getElementById("modal-host");
+  const host = document.getElementById("dialog-host");
   clear(host);
   host.classList.add("is-open");
   const input = h("input", { class: "input", value, placeholder });
@@ -151,7 +151,7 @@ export function promptDialog({ title, value = "", placeholder = "", confirmLabel
 
 /* ------------------------------- Choice ------------------------------- */
 export function choiceDialog({ title, msg = "", choices = [] }) {
-  const host = document.getElementById("modal-host");
+  const host = document.getElementById("dialog-host");
   clear(host);
   host.classList.add("is-open");
   const dlg = h("div", { class: "confirm" }, [
