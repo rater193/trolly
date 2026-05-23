@@ -346,6 +346,17 @@ export class State {
     const cl = card.checklists.find(c => c.id === checklistId);
     if (cl) { cl.title = title; this.persist(); this.bus.emit("card:updated", { boardId, listId, card }); }
   }
+  /** Reorder a checklist within its card. */
+  moveChecklist(boardId, listId, cardId, checklistId, toIndex) {
+    const card = this.findCard(boardId, listId, cardId);
+    if (!card) return;
+    const fromIdx = card.checklists.findIndex(c => c.id === checklistId);
+    if (fromIdx === -1) return;
+    const [cl] = card.checklists.splice(fromIdx, 1);
+    card.checklists.splice(Math.max(0, Math.min(toIndex, card.checklists.length)), 0, cl);
+    this.persist();
+    this.bus.emit("card:updated", { boardId, listId, card });
+  }
   addChecklistItem(boardId, listId, cardId, checklistId, text) {
     const card = this.findCard(boardId, listId, cardId);
     const cl = card?.checklists.find(c => c.id === checklistId);

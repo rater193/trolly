@@ -1,9 +1,11 @@
 /**
  * Drag-and-drop manager.
  *
- * Supports two drag types:
+ * Supports these drag types:
  *   - "card": move a card between/within lists
  *   - "list": reorder lists within a board
+ *   - "checklistItem": move an item between/within checklists on a card
+ *   - "checklist": reorder whole checklists within a card
  *
  * Uses pointer events with a custom ghost (the actual element is hidden
  * during drag); placeholders are inserted to show where the item will land.
@@ -15,10 +17,11 @@
 import { throttle } from "./dom.js";
 
 export class DragManager {
-  constructor({ onCardDrop, onListDrop, onChecklistItemDrop } = {}) {
+  constructor({ onCardDrop, onListDrop, onChecklistItemDrop, onChecklistDrop } = {}) {
     this.onCardDrop = onCardDrop || (() => {});
     this.onListDrop = onListDrop || (() => {});
     this.onChecklistItemDrop = onChecklistItemDrop || (() => {});
+    this.onChecklistDrop = onChecklistDrop || (() => {});
     this.active = null;
     this.pending = null;
     this._onMove = throttle(this._onMove.bind(this), 16);
@@ -59,6 +62,21 @@ export class DragManager {
     };
   }
 
+  /** Arm a checklist drag (reorder whole checklists within a card). */
+  startChecklist(e, { el, checklistId, cardId }) {
+    if (e.button !== 0) return;
+    if (this.active || this.pending) return;
+    const rect = el.getBoundingClientRect();
+    this.pending = {
+      type: "checklist",
+      el, checklistId, cardId,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+      startX: e.clientX, startY: e.clientY,
+      rect,
+    };
+  }
+
   /** Arm a list drag — same defer pattern. */
   startList(e, { el, listId, boardId }) {
     if (e.button !== 0) return;
@@ -86,7 +104,7 @@ export class DragManager {
     ghost.style.left = rect.left + "px";
     ghost.style.top = rect.top + "px";
     ghost.style.width = rect.width + "px";
-    if (type === "list") ghost.style.height = rect.height + "px";
+    if (type === "list" || type === "checklist") ghost.style.height = rect.height + "px";
     ghost.style.pointerEvents = "none";
     ghost.style.zIndex = "9999";
     document.body.appendChild(ghost);
@@ -97,6 +115,9 @@ export class DragManager {
       placeholder.style.setProperty("--ph-h", rect.height + "px");
     } else if (type === "checklistItem") {
       placeholder.className = "checklist-item-placeholder";
+      placeholder.style.height = rect.height + "px";
+    } else if (type === "checklist") {
+      placeholder.className = "checklist-placeholder";
       placeholder.style.height = rect.height + "px";
     } else {
       placeholder.className = "list";
@@ -127,6 +148,31 @@ export class DragManager {
     if (a.type === "card") this._updateCardTarget(e);
     else if (a.type === "list") this._updateListTarget(e);
     else if (a.type === "checklistItem") this._updateChecklistItemTarget(e);
+    else if (a.type === "checklist") this._updateChecklistTarget(e);
+  }
+
+  _updateChecklistTarget(e) {
+    const a = this.active;
+    const main = a.el.closest(".card-modal__main");
+    if (!main) return;
+    const checklists = Array.from(main.querySelectorAll(".checklist:not(.is-dragging)"));
+    let insertBefore = null;
+    for (const c of checklists) {
+      const r = c.getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { insertBefore = c; break; }
+    }
+    if (insertBefore) {
+      if (a.placeholder.nextElementSibling !== insertBefore) main.insertBefore(a.placeholder, insertBefore);
+    } else {
+      // Past the last checklist → drop just after it (before the next section).
+      const last = checklists[checklists.length - 1];
+      const after = last ? last.nextElementSibling : null;
+      if (after) {
+        if (a.placeholder !== after && a.placeholder.nextElementSibling !== after) main.insertBefore(a.placeholder, after);
+      } else if (last && a.placeholder.previousElementSibling !== last) {
+        main.appendChild(a.placeholder);
+      }
+    }
   }
 
   _updateCardTarget(e) {
@@ -241,6 +287,11 @@ export class DragManager {
           itemId: a.itemId,
           toIndex,
         });
+      } else if (a.type === "checklist") {
+        const parent = a.placeholder.parentNode;
+        const siblings = Array.from(parent.children).filter(c => c.classList.contains("checklist") || c === a.placeholder);
+        const toIndex = siblings.indexOf(a.placeholder);
+        this.onChecklistDrop({ cardId: a.cardId, checklistId: a.checklistId, toIndex });
       }
     }
     // Restore

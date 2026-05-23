@@ -31,6 +31,16 @@ export class BoardView {
           }
         }
       },
+      onChecklistDrop: ({ cardId, checklistId, toIndex }) => {
+        const board = this.state.currentBoard;
+        if (!board) return;
+        for (const list of board.lists) {
+          if (list.cards.some(c => c.id === cardId)) {
+            this.state.moveChecklist(board.id, list.id, cardId, checklistId, toIndex);
+            return;
+          }
+        }
+      },
     });
 
     // Re-render on board changes

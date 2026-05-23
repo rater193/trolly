@@ -215,12 +215,28 @@
 
 /* Checklist */
 .checklist { margin-bottom: var(--sp-5); }
+.checklist.is-dragging { opacity: 0.3; }
+.checklist.is-drag-ghost {
+  box-shadow: var(--shadow-drag);
+  background: var(--bg-modal);
+  border-radius: var(--r-3);
+  cursor: grabbing;
+}
+.checklist-placeholder {
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent-line);
+  border-radius: var(--r-3);
+  margin-bottom: var(--sp-5);
+  animation: phPulse 1.4s ease-in-out infinite;
+}
 .checklist__head {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
   margin-bottom: var(--sp-3);
+  cursor: grab;
 }
+.checklist__head:active { cursor: grabbing; }
 .checklist__title {
   font-size: var(--fs-14);
   font-weight: 700;

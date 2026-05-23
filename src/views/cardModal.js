@@ -181,7 +181,7 @@ export class CardModal {
     const pct = total ? Math.round(done / total * 100) : 0;
 
     const sec = h("div", { class: "checklist cm-section", dataset: { checklistId: cl.id } });
-    sec.appendChild(h("div", { class: "checklist__head" }, [
+    const head = h("div", { class: "checklist__head" }, [
       h("div", { class: "cm-section__icon" }, icon("checklist")),
       (() => {
         const t = h("div", { class: "checklist__title" }, cl.title);
@@ -197,7 +197,14 @@ export class CardModal {
           onConfirm: () => this.state.deleteChecklist(this.board.id, this.list.id, this.card.id, cl.id),
         });
       } }, "Delete"),
-    ]));
+    ]);
+    // Drag the whole checklist to reorder — start from the head, ignoring the
+    // editable title and buttons so click-to-edit / delete still work.
+    head.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("button,a,input,textarea")) return;
+      this.dnd?.startChecklist(e, { el: sec, checklistId: cl.id, cardId: this.card.id });
+    });
+    sec.appendChild(head);
     sec.appendChild(h("div", { class: "checklist__progress" }, [
       h("div", { class: "checklist__pct" }, pct + "%"),
       h("div", { class: "checklist__bar" }, h("div", { class: "checklist__bar-fill" + (pct === 100 && total > 0 ? " is-complete" : ""), style: { width: pct + "%" } })),
