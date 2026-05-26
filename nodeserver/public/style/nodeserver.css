@@ -1,0 +1,103 @@
+/* Styles specific to the shared NodeServer build: login gate, connection
+   status indicator, and the topbar account chip. */
+
+/* ------------------------------- Auth gate ------------------------------- */
+.auth-host {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-app);
+  padding: var(--sp-5);
+}
+.auth-host.is-open { display: flex; }
+
+.auth__card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-4);
+  box-shadow: var(--shadow-3);
+  padding: var(--sp-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.auth__brand {
+  font-size: var(--fs-24);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+.auth__subtitle {
+  font-size: var(--fs-14);
+  color: var(--text-3);
+  margin-top: calc(-1 * var(--sp-2));
+}
+.auth__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.auth__error {
+  color: var(--danger);
+  font-size: var(--fs-13);
+  min-height: 1em;
+}
+.auth__error:empty { display: none; }
+.auth__submit { width: 100%; justify-content: center; }
+.auth__toggle {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: var(--fs-13);
+  cursor: pointer;
+  padding: var(--sp-1);
+  text-align: center;
+}
+.auth__toggle:hover { color: var(--text-1); }
+
+/* -------------------------- Connection + account ------------------------- */
+.user-chip { display: inline-flex; align-items: center; gap: var(--sp-2); }
+
+.conn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  flex: 0 0 auto;
+  background: var(--text-4);
+}
+.conn-dot--online {
+  background: var(--success);
+  box-shadow: 0 0 0 3px rgba(109, 220, 156, 0.18);
+}
+.conn-dot--offline {
+  background: var(--warning);
+  box-shadow: 0 0 0 3px rgba(255, 196, 107, 0.18);
+  animation: conn-pulse 1.2s var(--ease-in-out) infinite;
+}
+@keyframes conn-pulse {
+  50% { opacity: 0.4; }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  background: none;
+  border: none;
+  border-radius: var(--r-1);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--fs-14);
+  cursor: pointer;
+  text-align: left;
+}
+.menu-item:hover { background: var(--bg-hover); }
+.menu-item svg { width: 16px; height: 16px; color: var(--text-3); }

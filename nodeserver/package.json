@@ -1,0 +1,19 @@
+{
+  "name": "trolly-nodeserver",
+  "version": "1.0.0",
+  "description": "Self-hostable HTTPS server that shares Trolly projects and organizations across users in real time.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0",
+    "selfsigned": "^2.4.1",
+    "ws": "^8.18.0"
+  }
+}

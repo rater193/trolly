@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trolley · Shared Boards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/reset.css" />
+  <link rel="stylesheet" href="style/tokens.css" />
+  <link rel="stylesheet" href="style/animations.css" />
+  <link rel="stylesheet" href="style/components.css" />
+  <link rel="stylesheet" href="style/layout.css" />
+  <link rel="stylesheet" href="style/board.css" />
+  <link rel="stylesheet" href="style/card-modal.css" />
+  <link rel="stylesheet" href="style/nodeserver.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Workspace navigation"></aside>
+    <main class="main"></main>
+  </div>
+
+  <!-- Hosts for floating UI -->
+  <div id="modal-host" class="modal-host"></div>
+  <div id="dialog-host" class="modal-host"></div>
+  <div id="toast-host" class="toast-host" aria-live="polite"></div>
+  <!-- popover-host must come last so anchor-positioned popovers can reference
+       triggers anywhere above them (app content and the card modal). -->
+  <div id="popover-host"></div>
+
+  <!-- Login / register gate, shown before the app mounts when not signed in. -->
+  <div id="auth-host" class="auth-host"></div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+
+# Runtime data and generated TLS material — never commit these.
+data/
+certs/
+*.pem
